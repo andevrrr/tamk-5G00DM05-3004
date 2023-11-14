@@ -1,0 +1,7 @@
+#Content
+*.bak
+*.tmp
+*tmplate*
+*[#~]
+node_modules/
+tmp/
