@@ -1,6 +1,6 @@
 -- Author: Anton Kucherenko anton.kucherenko@tuni.fi
 -- Date: 2003-11-21
--- File: 013-query-2.sql
+-- File: 014-query-2.sql
 
 SELECT ename,
     sal * 4 AS 'first quarter'
