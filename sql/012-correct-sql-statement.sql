@@ -1,6 +1,6 @@
 -- Author: Anton Kucherenko anton.kucherenko@tuni.fi
 -- Date: 2003-11-21
--- File: 012-list-tables.sql
+-- File: 012-correct-sql-statement.sql
 
 -- ERRORS
 -- 1. salary is names as sal in the db
