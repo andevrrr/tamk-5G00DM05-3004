@@ -15,5 +15,4 @@ SELECT empno, ename,
 FROM emp
 ;
 
-
 -- End of file
