@@ -1,5 +1,5 @@
--- Author: Anton Kucherenko anton.kucherenko@tuni.fi
--- Date: 2003-12-02
+-- Author: Anton Kucherenko <anton.kucherenko@tuni.fi>
+-- Date: 2023-12-02
 -- File: 033-order-by-3.sql
 
 SELECT
