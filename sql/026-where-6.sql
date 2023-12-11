@@ -1,5 +1,5 @@
--- Author: Anton Kucherenko anton.kucherenko@tuni.fi
--- Date: 2003-11-24
+-- Author: Anton Kucherenko <anton.kucherenko@tuni.fi>
+-- Date: 2023-11-24
 -- File: 026-where-6.sql
 
 SELECT ename, deptno
