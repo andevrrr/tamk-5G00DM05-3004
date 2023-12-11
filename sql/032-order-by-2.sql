@@ -1,5 +1,5 @@
--- Author: Anton Kucherenko anton.kucherenko@tuni.fi
--- Date: 2003-12-02
+-- Author: Anton Kucherenko <anton.kucherenko@tuni.fi>
+-- Date: 2023-12-02
 -- File: 032-order-by-2.sql
 
 SELECT empno,
