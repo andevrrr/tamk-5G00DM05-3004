@@ -6,31 +6,36 @@
 
 ## Week 46:
 
-### Commits: 
+### Commits:
 - November 14 (Tuesday)
 - Forgot to commit the second time (
 
 ## Week 47:
 
-### Commits: 
+### Commits:
 - November 21 (Tuesday)
 - November 24 (Friday)
 
 ## Week 48:
 
-### Commits: 
+### Commits:
 - November 29 (Wednesday)
 - December 2 (Saturday)
 
 ## Week 49:
 
-### Commits: 
+### Commits:
 - December 6 (Wednesday)
 - Forgot to commit the second time (
 
 ## Week 50:
 
-### Commits: 
+### Commits:
 - December 11 (Monday)
 - December 17 (Sunday)
+
+## Week 51:
+
+### Commits:
+- December 22 (Friday)
 
