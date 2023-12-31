@@ -44,3 +44,4 @@
 
 ### Commits:
 - December 27 (Wednesday)
+- December 31 (Sunday) - Last Commit! All of the exercises are DONE!
