@@ -11,6 +11,6 @@ FROM
 WHERE
     deptno = 10
 ORDER BY
-    deptno, ename;
+    deptno ASC, ename ASC;
 
 -- End of file
