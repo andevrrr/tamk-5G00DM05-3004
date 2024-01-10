@@ -4,7 +4,7 @@
 
 SELECT ename, job, sal
 FROM emp
-WHERE (job = 'CLERK' OR job = 'ANALYST')
-AND (sal <> 1000 OR sal <> 5000);
+WHERE (UPPER(job) = 'CLERK' OR UPPER(job) = 'ANALYST')
+AND sal NOT IN (1000, 5000);
 
 -- End of file
