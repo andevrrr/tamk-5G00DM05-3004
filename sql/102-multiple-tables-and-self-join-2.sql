@@ -3,17 +3,17 @@
 -- File: 102-multiple-tables-and-self-join-2.sql
 
 SELECT
-    e.ename AS "Employee",
-    e.empno AS "Emp#",
-    m.ename AS "Manager",
-    m.empno AS "Mgr#"
+    e1.deptno AS "Dept",
+    e1.ename AS "Employee",
+    e2.ename AS "Colleague"
 FROM
-    emp AS e
-    INNER JOIN emp AS m ON e.mgr = m.empno
+    emp e1
+    JOIN emp e2 ON e1.deptno = e2.deptno
 WHERE
-    LOWER(m.ename) IN ('blake', 'ford', 'scott')
-    AND e.empno <> m.empno
+    e1.empno <> e2.empno
 ORDER BY
-    "Manager", "Employee";
+    "Dept" ASC,
+    "Employee" ASC,
+    "Colleague" ASC;
 
 -- End of file
