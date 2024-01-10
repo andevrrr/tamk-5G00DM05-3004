@@ -3,9 +3,9 @@
 -- File: 091-multiple-tables-1.sql
 
 SELECT e.ename, e.deptno, d.dname
-FROM emp e
-JOIN dept d ON e.deptno = d.deptno
-WHERE d.loc = 'DALLAS' OR e.job = 'SALESMAN'
-ORDER BY e.ename;
+FROM emp AS e
+JOIN dept AS d ON e.deptno = d.deptno
+WHERE LOWER(d.loc) = 'dallas' OR LOWER(e.job) = 'salesman'
+ORDER BY e.ename ASC;
 
 -- End of file
