@@ -3,7 +3,7 @@
 -- File: 043-like-3.sql
 
 SELECT
-    ename AS "Name"
+    ename
 FROM
     emp
 WHERE
