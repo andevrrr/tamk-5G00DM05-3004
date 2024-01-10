@@ -3,7 +3,7 @@
 -- File: 114-create-table-4.sql
 
 CREATE TABLE inventory (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY NOT NULL,
     item VARCHAR(255),
     worth INT,
     comment TEXT
