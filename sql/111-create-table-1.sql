@@ -3,7 +3,7 @@
 -- File: 111-create-table-1.sql
 
 CREATE TABLE person (
-    id INT PRIMARY KEY,
+    id INT NOT NULL PRIMARY KEY,
     last VARCHAR(255),
     first VARCHAR(255),
     phone VARCHAR(20) CHECK (phone LIKE '+%' AND phone NOT LIKE '%[^+ 0-9]%'),
