@@ -3,9 +3,9 @@
 -- File: 093-multiple-tables-3.sql
 
 SELECT e.ename, d.dname, d.loc
-FROM emp e
-JOIN dept d ON e.deptno = d.deptno
+FROM emp AS e
+JOIN dept AS d ON e.deptno = d.deptno
 WHERE e.comm IS NOT NULL AND e.comm > 0
-ORDER BY e.ename;
+ORDER BY e.ename ASC;
 
 -- End of file
