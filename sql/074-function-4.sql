@@ -9,7 +9,7 @@ SELECT
         ELSE job
     END AS job
 FROM emp
-ORDER BY ename, job;
+ORDER BY ename ASC, job ASC;
 
 
 -- End of file
