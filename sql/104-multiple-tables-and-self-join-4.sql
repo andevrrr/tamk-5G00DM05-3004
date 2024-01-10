@@ -8,12 +8,12 @@ SELECT
     e.ename AS "Employee",
     m.ename AS "Manager"
 FROM
-    emp e
-    INNER JOIN emp m ON e.mgr = m.empno
-    INNER JOIN dept d ON e.deptno = d.deptno
-    INNER JOIN salgrade s ON m.sal BETWEEN s.losal AND s.hisal
+    emp AS e
+    INNER JOIN emp AS m ON e.mgr = m.empno
+    INNER JOIN dept AS d ON e.deptno = d.deptno
+    INNER JOIN salgrade AS s ON m.sal BETWEEN s.losal AND s.hisal
 WHERE
-    m.ename IN ('BLAKE', 'FORD', 'JONES')
+    LOWER(m.ename) IN ('blake', 'ford', 'jones')
     AND s.grade > 3
 ORDER BY
     "Location", "Manager", "Employee";
