@@ -3,9 +3,9 @@
 -- File: 092-multiple-tables-2.sql
 
 SELECT DISTINCT e.job
-FROM emp e
-JOIN dept d ON e.deptno = d.deptno
-WHERE d.loc IN ('BOSTON', 'NEW YORK')
-ORDER BY e.job;
+FROM emp AS e
+JOIN dept AS d ON e.deptno = d.deptno
+WHERE LOWER(d.loc) IN ('boston', 'new york')
+ORDER BY e.job ASC;
 
 -- End of file
