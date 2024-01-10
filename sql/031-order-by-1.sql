@@ -2,9 +2,10 @@
 -- Date: 2023-12-02
 -- File: 031-order-by-1.sql
 
-SELECT ename, sal, sal * 1.15 AS "new salary"
+SELECT emp.ename, emp.sal, emp.sal * 1.15 AS "new salary"
 FROM emp
-WHERE mgr = (SELECT empno FROM emp WHERE ename = 'BLAKE')
-ORDER BY "new salary", ename;
+JOIN emp AS manager ON emp.mgr = manager.empno
+WHERE UPPER(manager.ename) = 'BLAKE'
+ORDER BY "new salary", emp.ename;
 
 -- End of file
