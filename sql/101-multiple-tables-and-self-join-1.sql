@@ -3,10 +3,10 @@
 -- File: 101-multiple-tables-and-self-join-1.sql
 
 SELECT
-    e.ename AS "Employee",
-    e.empno AS "Emp#",
     m.ename AS "Manager",
-    m.empno AS "Mgr#"
+    m.empno AS "Mgr#",
+    e.ename AS "Employee",
+    e.empno AS "Emp#"
 FROM
     emp AS e
     INNER JOIN emp AS m ON e.mgr = m.empno
