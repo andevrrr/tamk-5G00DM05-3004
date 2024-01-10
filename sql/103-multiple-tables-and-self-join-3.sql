@@ -3,7 +3,7 @@
 -- File: 103-multiple-tables-and-self-join-3.sql
 
 SELECT
-    e.ename AS "Employee"
+    e.ename
 FROM
     emp AS e
     INNER JOIN emp AS m ON e.mgr = m.empno
