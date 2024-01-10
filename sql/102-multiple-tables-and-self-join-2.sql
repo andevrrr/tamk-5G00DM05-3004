@@ -12,7 +12,7 @@ FROM
     INNER JOIN emp AS m ON e.mgr = m.empno
 WHERE
     LOWER(m.ename) IN ('blake', 'ford', 'scott')
-    AND e.empno != m.empno
+    AND e.empno <> m.empno
 ORDER BY
     "Manager", "Employee";
 
