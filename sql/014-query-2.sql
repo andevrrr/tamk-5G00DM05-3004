@@ -3,7 +3,7 @@
 -- File: 014-query-2.sql
 
 SELECT ename,
-    sal * 4 AS 'First Quarter'
+    sal * 3 AS 'first quarter'
 FROM emp;
 
 -- End of file
