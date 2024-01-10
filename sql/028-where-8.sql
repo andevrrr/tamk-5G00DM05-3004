@@ -4,6 +4,6 @@
 
 SELECT ename, sal, comm
 FROM emp
-WHERE comm IS NOT NULL AND comm != 0;
+WHERE comm IS NOT NULL AND comm <> 0;
 
 -- End of file
