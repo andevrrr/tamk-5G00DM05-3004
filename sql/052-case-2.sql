@@ -12,6 +12,6 @@ SELECT ename,
            ELSE comm
        END AS comm
 FROM emp
-ORDER BY comm, ename;
+ORDER BY comm ASC, ename ASC;
 
 -- End of file
