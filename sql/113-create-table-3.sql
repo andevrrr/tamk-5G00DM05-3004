@@ -3,11 +3,11 @@
 -- File: 113-create-table-3.sql
 
 CREATE TABLE weather (
-    id INT PRIMARY KEY,
-    time_of_reading TIMESTAMP,
+    id INT NOT NULL PRIMARY KEY,
+    time_of_reading TIMESTAMP NOT NULL,
     high DECIMAL(5, 2),
     low DECIMAL(5, 2),
-    sig CHAR(2),
+    sig VARCHAR(2),
     comment TEXT
 );
 
