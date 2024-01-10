@@ -4,7 +4,7 @@
 
 SELECT job, COUNT(*) AS "count of managers"
 FROM emp
-WHERE job IN ('MANAGER', 'PRESIDENT')
+WHERE UPPER(job) IN ('MANAGER', 'PRESIDENT')
 GROUP BY job;
 
 -- End of file
