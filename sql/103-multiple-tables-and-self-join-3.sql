@@ -10,6 +10,6 @@ FROM
 WHERE
     e.sal > m.sal
 ORDER BY
-    "Employee";
+    e.ename;
 
 -- End of file
