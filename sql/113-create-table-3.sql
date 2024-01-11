@@ -8,7 +8,7 @@ CREATE TABLE weather (
     high DECIMAL,
     low DECIMAL,
     sig VARCHAR(255),
-    comment VARCHAR(MAX)
+    comment VARCHAR(1024)
 );
 
 -- End of file
