@@ -7,7 +7,7 @@ CREATE TABLE football (
     first VARCHAR(255),
     last VARCHAR(255),
     team VARCHAR(255),
-    comment VARCHAR(MAX)
+    comment VARCHAR(1024)
 );
 
 -- End of file
