@@ -7,7 +7,7 @@ SELECT
     e1.ename AS "Employee",
     e2.ename AS "Colleague"
 FROM
-    emp e1
+    emp AS e1
     JOIN emp e2 ON e1.deptno = e2.deptno
 WHERE
     e1.empno <> e2.empno
