@@ -5,7 +5,7 @@
 SELECT
     deptno AS "Dept",
     ename AS "Employee",
-    ROUND(sal * 0.31, 2) AS "Taxes"
+    CAST(ROUND(sal * 0.31 * 12, 0) AS INTEGER) AS "Taxes"
 FROM
     emp
 WHERE
