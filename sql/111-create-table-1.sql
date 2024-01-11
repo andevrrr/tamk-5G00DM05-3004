@@ -6,7 +6,7 @@ CREATE TABLE person (
     id INT NOT NULL PRIMARY KEY UNIQUE,
     last VARCHAR(255),
     first VARCHAR(255),
-    phone VARCHAR(20) CHECK (LOWER(phone) LIKE '+%' AND phone NOT LIKE '%[^+ 0-9]%'),
+    phone VARCHAR(20) CHECK (LOWER(phone) LIKE '+%' AND LOWER(phone) NOT LIKE '%[^+ 0-9]%'),
     zip VARCHAR(10),
     city VARCHAR(255),
     address VARCHAR(255)
