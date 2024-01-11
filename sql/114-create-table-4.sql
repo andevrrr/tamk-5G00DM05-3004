@@ -6,7 +6,7 @@ CREATE TABLE inventory (
     id INT PRIMARY KEY UNIQUE NOT NULL,
     item VARCHAR(255),
     worth INT,
-    comment VARCHAR(MAX)
+    comment VARCHAR(1024)
 );
 
 -- End of file
