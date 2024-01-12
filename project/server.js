@@ -10,12 +10,14 @@ const enrollmentRoutes = require("./enrollment");
 const assignmentRoutes = require("./assignment");
 const courseRoutes = require("./course");
 const submissionRoutes = require("./submission.js");
+const gradeRoutes = require("./grade.js");
 
 app.use("/api/enrollments", enrollmentRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/assignments", assignmentRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/submissions", submissionRoutes);
+app.use("/api/grades", gradeRoutes);
 
 const createSqlFile = "./sql/create.sql";
 const insertSqlFile = "./sql/insert.sql";
