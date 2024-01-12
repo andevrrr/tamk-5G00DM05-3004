@@ -9,11 +9,13 @@ const studentRoutes = require("./student");
 const enrollmentRoutes = require("./enrollment");
 const assignmentRoutes = require("./assignment");
 const courseRoutes = require("./course");
+const submissionRoutes = require("./submission.js");
 
 app.use("/api/enrollments", enrollmentRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/assignments", assignmentRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/submissions", submissionRoutes);
 
 const createSqlFile = "./sql/create.sql";
 const insertSqlFile = "./sql/insert.sql";
@@ -39,7 +41,7 @@ function runSqlFile(filePath) {
 
 console.log("Running create.sql");
 runSqlFile(createSqlFile);
-// console.log("Running insert.sql"); for now, works only once the tables are created and only one run time
+// console.log("Running insert.sql"); // for now, works only once the tables are created and only one run time
 // runSqlFile(insertSqlFile);
 
 
