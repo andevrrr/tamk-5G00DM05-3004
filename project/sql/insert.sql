@@ -9,3 +9,11 @@ INSERT INTO assignments (title, description, course_id, student_id) VALUES ('Phy
 
 INSERT INTO enrollments (student_id, course_id) VALUES (1, 1);
 INSERT INTO enrollments (student_id, course_id) VALUES (2, 2);
+
+INSERT INTO grades (submission_id, grade, feedback) VALUES (1, 90, 'Well done!');
+INSERT INTO grades (submission_id, grade, feedback) VALUES (2, 85, 'Good effort.');
+INSERT INTO grades (submission_id, grade, feedback) VALUES (3, 78, 'Needs improvement.');
+
+INSERT INTO submissions (assignment_id, student_id, submission_date) VALUES (1, 1, '2024-01-09 10:00:00');
+INSERT INTO submissions (assignment_id, student_id, submission_date) VALUES (2, 2, '2024-01-10 09:30:00');
+INSERT INTO submissions (assignment_id, student_id, submission_date) VALUES (3, 1, '2024-01-11 11:45:00');
