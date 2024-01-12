@@ -29,3 +29,21 @@ CREATE TABLE IF NOT EXISTS enrollments (
   FOREIGN KEY (course_id) REFERENCES courses(id),
   UNIQUE(student_id, course_id)
 );
+
+CREATE TABLE IF NOT EXISTS submissions (
+  submission_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  assignment_id INTEGER NOT NULL UNIQUE,
+  student_id INTEGER NOT NULL,
+  submission_date DATETIME NOT NULL,
+  FOREIGN KEY (assignment_id) REFERENCES assignments(id),
+  FOREIGN KEY (student_id) REFERENCES students(id),
+  UNIQUE(student_id, assignment_id)
+);
+
+CREATE TABLE IF NOT EXISTS grades (
+  grade_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  submission_id INTEGER NOT NULL UNIQUE,
+  grade INTEGER NOT NULL,
+  feedback TEXT,
+  FOREIGN KEY (submission_id) REFERENCES submissions(submission_id)
+);
