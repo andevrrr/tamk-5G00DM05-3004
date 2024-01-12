@@ -13,8 +13,11 @@ CREATE TABLE IF NOT EXISTS courses (
 CREATE TABLE IF NOT EXISTS assignments (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title TEXT NOT NULL,
-  course_id INTEGER,
+  description TEXT,
+  course_id INTEGER NOT NULL,
+  student_id INTEGER NOT NULL,
   FOREIGN KEY (course_id) REFERENCES courses(id)
+  FOREIGN KEY (student_id) REFERENCES students(id),
 );
 
 CREATE TABLE IF NOT EXISTS enrollments (
