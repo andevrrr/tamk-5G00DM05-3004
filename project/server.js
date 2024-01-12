@@ -31,11 +31,13 @@ function runSqlFile(filePath) {
     if (query.trim()) {
       // Check if the query is not empty or whitespace
       console.log(`Executing query: ${query}`);
-      db.run(query, (err) => {
-        if (err) {
-          console.error(`Error running query: ${err.message}`);
-          throw err;
-        }
+      db.run("PRAGMA foreign_keys = ON", (err) => {
+        db.run(query, (err) => {
+          if (err) {
+            console.error(`Error running query: ${err.message}`);
+            throw err;
+          }
+        });
       });
     }
   });
@@ -45,7 +47,6 @@ console.log("Running create.sql");
 runSqlFile(createSqlFile);
 // console.log("Running insert.sql"); // for now, works only once the tables are created and only one run time
 // runSqlFile(insertSqlFile);
-
 
 // the bellow SELECT is just for testing purposes, just for now
 // db.all('SELECT * FROM students', (err, rows) => {
