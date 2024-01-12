@@ -4,10 +4,12 @@ const app = express();
 app.use(express.json());
 
 const studentRoutes = require('./student');
+const enrollmentRoutes = require('./enrollment');
 const assignmentRoutes = require('./assignment');
 const courseRoutes = require('./course');
 
-app.use('/api/enrollments', studentRoutes);
+app.use('/api/enrollments', enrollmentRoutes);
+app.use('/api/students', studentRoutes);
 app.use('/api/assignments', assignmentRoutes);
 app.use('/api/courses', courseRoutes);
 
