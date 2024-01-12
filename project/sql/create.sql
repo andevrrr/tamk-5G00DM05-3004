@@ -16,8 +16,8 @@ CREATE TABLE IF NOT EXISTS assignments (
   description TEXT,
   course_id INTEGER NOT NULL,
   student_id INTEGER NOT NULL,
-  FOREIGN KEY (course_id) REFERENCES courses(id)
-  FOREIGN KEY (student_id) REFERENCES students(id),
+  FOREIGN KEY (course_id) REFERENCES courses(id),
+  FOREIGN KEY (student_id) REFERENCES students(id)
 );
 
 CREATE TABLE IF NOT EXISTS enrollments (
