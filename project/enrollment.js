@@ -1,87 +1,125 @@
 const express = require("express");
 const router = express.Router();
 const db = require("./database");
+const { body, validationResult } = require('express-validator');
 
-router.get("/", (req, res) => {
-  db.all("SELECT * FROM enrollments", (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
+// Centralized error handling
+const asyncHandler = (fn) => (req, res, next) =>
+  Promise.resolve(fn(req, res, next)).catch(next);
+
+
+// Validation for POST
+const validateEnrollment = [
+  body('student_id').isInt().withMessage('Student ID must be an integer'),
+  body('course_id').isInt().withMessage('Course ID must be an integer'),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
-    res.json(rows);
+    next();
+  },
+];
+
+const runDbQuery = (query, params) => new Promise((resolve, reject) => {
+  db.run(query, params, function(err) {
+    if (err) {
+      reject(err);
+    } else {
+      resolve(this); // 'this' contains the context of the query execution
+    }
   });
 });
 
-router.get("/:id", (req, res) => {
-  const id = req.params.id;
-  db.get("SELECT * FROM enrollments WHERE id = ?", [id], (err, row) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
+router.get(
+  "/",
+  asyncHandler(async (req, res) => {
+    const rows = await new Promise((resolve, reject) => {
+      db.all("SELECT * FROM enrollments", [], (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+    res.json(rows);
+  })
+);
+
+router.get(
+  "/:id",
+  asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const row = await new Promise((resolve, reject) => {
+      db.get("SELECT * FROM enrollments WHERE id = ?", [id], (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
+      });
+    });
+
     if (!row) {
-      res.status(404).json({ message: "Enrollment not found" });
-      return;
+      throw new Error("Enrollment not found");
     }
     res.json(row);
-  });
-});
+  })
+);
 
-router.post("/", (req, res) => {
-  const { student_id, course_id } = req.body;
-  db.run(
-    "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)",
-    [student_id, course_id],
-    function (err) {
-      if (err) {
-        res.status(400).json({ error: err.message });
-        return;
-      }
-      res.json({
-        message: "Enrollment created",
-        data: {
-          id: this.lastID,
-          student_id,
-          course_id,
-        },
-      });
-    }
-  );
-});
+router.post(
+  "/",
+  validateEnrollment,
+  asyncHandler(async (req, res) => {
+    const { student_id, course_id } = req.body;
+    const result = await runDbQuery(
+      "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)",
+      [student_id, course_id]
+    );
+    res.json({
+      message: "Enrollment created",
+      data: {
+        id: result.lastID,
+        student_id,
+        course_id,
+      },
+    });
+  })
+);
 
-router.patch("/:id", (req, res) => {
-  const id = req.params.id;
-  const { student_id, course_id } = req.body;
-  db.run(
-    "UPDATE enrollments SET student_id = ?, course_id = ? WHERE id = ?",
-    [student_id, course_id, id],
-    function (err) {
-      if (err) {
-        res.status(400).json({ error: err.message });
-        return;
-      }
-      if (this.changes === 0) {
-        res.status(404).json({ message: "Enrollment not found" });
-        return;
-      }
-      res.json({ message: "Enrollment updated" });
-    }
-  );
-});
+router.patch(
+  "/:id",
+  validateEnrollment,
+  asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const { student_id, course_id } = req.body;
+    const result = await runDbQuery(
+      "UPDATE enrollments SET student_id = ?, course_id = ? WHERE id = ?",
+      [student_id, course_id, id]
+    );
 
-router.delete("/:id", (req, res) => {
-  const id = req.params.id;
-  db.run("DELETE FROM enrollments WHERE id = ?", [id], function (err) {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
+    if (result.changes === 0) {
+      throw new Error("Enrollment not found");
     }
-    if (this.changes === 0) {
-      res.status(404).json({ message: "Enrollment not found" });
-      return;
+    res.json({ message: "Enrollment updated" });
+  })
+);
+
+router.delete(
+  "/:id",
+  asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const result = await runDbQuery(
+      "DELETE FROM enrollments WHERE id = ?",
+      [id]
+    );
+
+    if (result.changes === 0) {
+      throw new Error("Enrollment not found");
     }
     res.json({ message: "Enrollment deleted" });
-  });
-});
+  })
+);
 
 module.exports = router;
