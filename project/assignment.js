@@ -82,6 +82,37 @@ router.get(
   })
 );
 
+router.get(
+  "/course/:courseId",
+  asyncHandler(async (req, res) => {
+    try {
+      const { courseId } = req.params;
+      const rows = await new Promise((resolve, reject) => {
+        db.all("SELECT * FROM assignments WHERE course_id = ?", [courseId], (err, rows) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+
+      if (rows.length === 0) {
+        throw new Error("No assignments found for this course");
+      }
+
+      res.status(200).json(rows);
+    } catch (error) {
+      if (error.message === "No assignments found for this course") {
+        res.status(404).json({ error: error.message });
+      } else {
+        console.error("Error:", error);
+        res.status(500).json({ error: error.message });
+      }
+    }
+  })
+);
+
 router.post(
   "/",
   validateAssignment,
