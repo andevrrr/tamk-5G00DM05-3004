@@ -1,89 +1,151 @@
 const express = require("express");
 const router = express.Router();
 const db = require("./database.js");
+const { body, validationResult } = require("express-validator");
 
-router.get("/", (req, res) => {
-  db.all("SELECT * FROM assignments", [], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
+// Centralized error handling
+const asyncHandler = (fn) => (req, res, next) =>
+  Promise.resolve(fn(req, res, next)).catch(next);
+
+// Validation for POST
+const validateAssignment = [
+  body("title").notEmpty().withMessage("Title is required"),
+  body("description").notEmpty().withMessage("Description is required"),
+  body("course_id").isInt().withMessage("Course ID must be an integer"),
+  body("student_id").isInt().withMessage("Student ID must be an integer"),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
-    res.status(200).json(rows);
+    next();
+  },
+];
+
+const runDbQuery = (query, params) => new Promise((resolve, reject) => {
+  db.run(query, params, function(err) {
+    if (err) {
+      reject(err);
+    } else {
+      resolve(this); // 'this' contains the context of the query execution
+    }
   });
 });
 
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-  db.get("SELECT * FROM assignments WHERE id = ?", [id], (err, row) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
-    if (!row) {
-      res.status(404).json({ message: "Assignment not found" });
-      return;
-    }
-    res.status(200).json(row);
-  });
-});
+router.get(
+  "/",
+  asyncHandler(async (req, res) => {
+    try {
+      const rows = await new Promise((resolve, reject) => {
+        db.all("SELECT * FROM assignments", [], (err, rows) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(rows);
+          }
+        });
+      });
 
-router.post("/", (req, res) => {
-  const { title, description, course_id, student_id } = req.body;
-  if (!title || !description || !course_id || !student_id) {
-    res.status(400).json({ error: "Title, description, course_id, and student_id are required" });
-    return;
-  }
-  db.run(
-    "INSERT INTO assignments (title, description, course_id, student_id) VALUES (?, ?, ?, ?)",
-    [title, description, course_id, student_id],
-    function (err) {
-      if (err) {
-        res.status(500).json({ error: err.message });
-        return;
+      res.status(200).json(rows);
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({ error: error.message });
+    }
+  })
+);
+
+router.get(
+  "/:id",
+  asyncHandler(async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const row = await new Promise((resolve, reject) => {
+        db.get("SELECT * FROM assignments WHERE id = ?", id, (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row);
+          }
+        });
+      });
+
+      if (!row) {
+        const error = new Error("Assignment not found");
+        error.status = 404;
+        throw error;
       }
+
+      res.status(200).json(row);
+    } catch (error) {
+      next(error); // Pass the error to the error handler middleware
+    }
+  })
+);
+
+router.post(
+  "/",
+  validateAssignment,
+  asyncHandler(async (req, res) => {
+    const { title, description, course_id, student_id } = req.body;
+    try {
+      const result = await runDbQuery(
+        "INSERT INTO assignments (title, description, course_id, student_id) VALUES (?, ?, ?, ?)",
+        [title, description, course_id, student_id]
+      );
       res.status(201).json({
         message: "Assignment created",
         data: {
-          id: this.lastID,
+          id: result.lastID,
           title,
           description,
           course_id,
           student_id,
         },
       });
+    } catch (error) {
+      throw new Error(error.message);
     }
-  );
-});
+  })
+);
 
-router.patch("/:id", (req, res) => {
-  const { id } = req.params;
-  const { title, description, course_id, student_id } = req.body;
-  if (!title && !description && !course_id && !student_id) {
-    res.status(400).json({ error: "At least one field (title, description, course_id, student_id) is required for update" });
-    return;
-  }
-  db.run(
-    "UPDATE assignments SET title = COALESCE(?, title), description = COALESCE(?, description), course_id = COALESCE(?, course_id), student_id = COALESCE(?, student_id) WHERE id = ?",
-    [title, description, course_id, student_id, id],
-    (err) => {
-      if (err) {
-        res.status(500).json({ error: err.message });
-        return;
+router.patch(
+  "/:id",
+  validateAssignment,
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { title, description, course_id, student_id } = req.body;
+
+    try {
+      const result = await runDbQuery(
+        "UPDATE assignments SET title = COALESCE(?, title), description = COALESCE(?, description), course_id = COALESCE(?, course_id), student_id = COALESCE(?, student_id) WHERE id = ?",
+        [title, description, course_id, student_id, id]
+      );
+
+      if (result.changes === 0) {
+        // If no rows were updated, it means the assignment doesn't exist
+        throw new Error("Assignment not found");
       }
-      res.status(200).json({ message: 'Assignment updated' });
-    }
-  );
-});
 
-router.delete("/:id", (req, res) => {
-  const { id } = req.params;
-  db.run("DELETE FROM assignments WHERE id = ?", [id], (err) => {
-    if (err) {
-      res.status(500).json({ error: "Internal Server Error" });
-      return;
+      res.status(200).json({ message: "Assignment updated" });
+    } catch (error) {
+      throw new Error(error.message);
     }
-    res.status(204).end();
-  });
-});
+  })
+);
+
+router.delete(
+  "/:id",
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const result = await db.run("DELETE FROM assignments WHERE id = ?", id);
+
+    if (result.changes === 0) {
+      // If no rows were deleted, it means the assignment doesn't exist
+      return res.status(404).json({ message: "Assignment not found" });
+    }
+
+    res.status(204).json({ message: "Assignment deleted" });
+  })
+);
 
 module.exports = router;
