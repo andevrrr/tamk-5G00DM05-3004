@@ -11,6 +11,8 @@ const asyncHandler = (fn) => (req, res, next) =>
 const validateCourse = [
   body('title').notEmpty().withMessage('Title is required'),
   body('description').notEmpty().withMessage('Description is required'),
+  body("course_id").isInt().withMessage("Course ID must be an integer"),
+  body("student_id").isInt().withMessage("Student ID must be an integer"),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
