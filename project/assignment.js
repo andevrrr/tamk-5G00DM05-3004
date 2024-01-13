@@ -137,11 +137,11 @@ router.delete(
   "/:id",
   asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const result = await db.run("DELETE FROM assignments WHERE id = ?", id);
+    const result = await runDbQuery("DELETE FROM assignments WHERE id = ?", [id]);
 
     if (result.changes === 0) {
       // If no rows were deleted, it means the assignment doesn't exist
-      return res.status(404).json({ message: "Assignment not found" });
+      throw new Error("Assignment not found");
     }
 
     res.status(204).json({ message: "Assignment deleted" });
