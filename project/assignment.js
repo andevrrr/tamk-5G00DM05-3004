@@ -55,6 +55,52 @@ router.get(
 );
 
 router.get(
+  "/assignments",
+  asyncHandler(async (req, res) => {
+    try {
+      const { course_id, student_id } = req.query;
+
+      let query = "SELECT * FROM assignments";
+      let conditions = [];
+      let params = [];
+
+      if (course_id) {
+        conditions.push("course_id = ?");
+        params.push(course_id);
+      }
+
+      if (student_id) {
+        conditions.push("student_id = ?");
+        params.push(student_id);
+      }
+
+      if (conditions.length) {
+        query += " WHERE " + conditions.join(" AND ");
+      }
+
+      const rows = await new Promise((resolve, reject) => {
+        db.all(query, params, (err, rows) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(rows);
+          }
+        });
+      });
+
+      if (rows.length === 0) {
+        res.status(404).json({ message: "No assignments found matching the criteria" });
+      } else {
+        res.status(200).json(rows);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({ error: error.message });
+    }
+  })
+);
+
+router.get(
   "/:id",
   asyncHandler(async (req, res, next) => {
     try {
