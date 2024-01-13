@@ -2,6 +2,8 @@
 -- Date: 2023-12-31
 -- File: 111-create-table-1.sql
 
+-- there are no missing LOWER() or UPPER() in this code
+
 CREATE TABLE person (
     id INT NOT NULL PRIMARY KEY UNIQUE,
     last VARCHAR(255),
