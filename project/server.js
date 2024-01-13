@@ -22,43 +22,80 @@ app.use("/api/grades", gradeRoutes);
 const createSqlFile = "./sql/create.sql";
 const insertSqlFile = "./sql/insert.sql";
 
-function runSqlFile(filePath) {
-  const queries = fs
-    .readFileSync(filePath, { encoding: "utf8", flag: "r" })
-    .split(";");
+function areTablesEmpty(callback) {
+  // Define the primary key column for each table
+  const tables = {
+    'students': 'id',
+    'courses': 'id',
+    'assignments': 'id',
+    'enrollments': 'id',
+    'submissions': 'id',
+    'grades': 'id'
+  };
 
-  queries.forEach((query) => {
-    if (query.trim()) {
-      // Check if the query is not empty or whitespace
-      console.log(`Executing query: ${query}`);
-      db.run("PRAGMA foreign_keys = ON", (err) => {
-        db.run(query, (err) => {
-          if (err) {
-            console.error(`Error running query: ${err.message}`);
-            throw err;
-          }
-        });
-      });
-    }
+  let empty = true;
+  let tablesChecked = 0;
+
+  Object.entries(tables).forEach(([table, primaryKey]) => {
+    db.get(`SELECT ${primaryKey} FROM ${table} LIMIT 1`, (err, row) => {
+      tablesChecked++;
+      if (err) {
+        console.error(`Error checking table ${table}: ${err.message}`);
+        throw err;
+      }
+      if (row) {
+        empty = false;
+      }
+      // Check if this is the last table to be checked
+      if (tablesChecked === Object.keys(tables).length) {
+        callback(empty);
+      }
+    });
   });
 }
 
-console.log("Running create.sql");
-runSqlFile(createSqlFile);
-// console.log("Running insert.sql"); // for now, works only once the tables are created and only one run time
-// runSqlFile(insertSqlFile);
+async function runSqlFile(filePath) {
+  const queries = fs
+    .readFileSync(filePath, { encoding: "utf8", flag: "r" })
+    .split(";")
+    .map(query => query.trim())
+    .filter(query => query.length);
 
-// the bellow SELECT is just for testing purposes, just for now
-// db.all('SELECT * FROM students', (err, rows) => {
-//     if (err) {
-//       console.error(err.message);
-//     } else {
-//       console.log('Students:');
-//       rows.forEach((row) => {
-//         console.log(`ID: ${row.id}, Name: ${row.name}, Email: ${row.email}`);
-//       });
-//     }
-// });
+  for (const query of queries) {
+    await new Promise((resolve, reject) => {
+      db.run(query, err => {
+        if (err) {
+          console.error(`Error running query: ${err.message}`);
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+}
+
+async function initializeDatabase() {
+  try {
+    console.log("Running create.sql");
+    await runSqlFile(createSqlFile);
+
+    console.log("Checking if tables are empty");
+    await areTablesEmpty(async (empty) => {
+      if (empty) {
+        console.log("Running insert.sql");
+        await runSqlFile(insertSqlFile);
+        console.log("Tables are inserted successfully");
+      } else {
+        console.log("Tables already have data. Skipping insert.sql");
+      }
+    });
+  } catch (error) {
+    console.error("An error occurred during database initialization:", error);
+  }
+}
+
+initializeDatabase();
 
 const PORT = process.env.PORT || 3000;
 
