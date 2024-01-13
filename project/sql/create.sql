@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS enrollments (
 );
 
 CREATE TABLE IF NOT EXISTS submissions (
-  submission_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   assignment_id INTEGER NOT NULL UNIQUE,
   student_id INTEGER NOT NULL,
   submission_date DATETIME NOT NULL,
@@ -41,9 +41,9 @@ CREATE TABLE IF NOT EXISTS submissions (
 );
 
 CREATE TABLE IF NOT EXISTS grades (
-  grade_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   submission_id INTEGER NOT NULL UNIQUE,
   grade INTEGER NOT NULL,
   feedback TEXT,
-  FOREIGN KEY (submission_id) REFERENCES submissions(submission_id)
+  FOREIGN KEY (submission_id) REFERENCES submissions(id)
 );
