@@ -7,6 +7,13 @@ let db = new sqlite3.Database(DB_PATH, (err) => {
     throw err;
   } else {
     console.log('Connected to the SQLite database.');
+    db.run("PRAGMA foreign_keys = ON", err => {
+      if (err) {
+        console.error("Error enabling foreign key constraints:", err.message);
+      } else {
+        console.log("Foreign key constraints enabled.");
+      }
+    });
   }
 });
 
