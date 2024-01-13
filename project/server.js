@@ -19,6 +19,20 @@ app.use("/api/courses", courseRoutes);
 app.use("/api/submissions", submissionRoutes);
 app.use("/api/grades", gradeRoutes);
 
+app.use((err, req, res, next) => {
+  if (err.status === 400) {
+    // Validation error
+    res.status(400).json({ validationErrors: err.errors });
+  } else if (err.status === 404) {
+    // Not found error
+    res.status(404).json({ error: err.message });
+  } else {
+    // Unexpected server error
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 const createSqlFile = "./sql/create.sql";
 const insertSqlFile = "./sql/insert.sql";
 
