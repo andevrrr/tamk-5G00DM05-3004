@@ -1,5 +1,7 @@
 # tamk-5G00DM05-3004
 
+# The Project is Done!
+
 # Commit Schedule
 
 **Goal:** Try to commit twice a week.
@@ -45,3 +47,14 @@
 ### Commits:
 - December 27 (Wednesday)
 - December 31 (Sunday) - Last Commit! All of the exercises are DONE!
+
+# Below are the correction commits and Project commits
+
+## Week 02:
+
+### Commits:
+- January 10 (Wednesday)
+- January 11 (Thursday) - start of the project
+- January 12 (Friday)
+- January 13 (Saturday)
+- January 14 (Sunday) - Project Finnished !
